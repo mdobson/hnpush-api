@@ -1,0 +1,19 @@
+{
+  "name": "suprfeedr",
+  "version": "0.0.1",
+  "description": "Interface for suprfeedr api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies":{
+    "argo":"0.4.x",
+    "argo-url-router":"0.0.x"
+  },
+  "engines": {
+    "node": ">= v0.8.x",
+    "npm": ">= 1.2.x"
+  },
+  "author": "mdobs",
+  "license": "BSD"
+}
