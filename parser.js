@@ -4,7 +4,7 @@ var xml = '<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/
 
 
 module.exports = function(xmlStruct, cb) {
-  parse(xml, function(err, result) {
+  parse(xmlStruct, function(err, result) {
     if(err) {
       console.log(err);
       cb(err);
