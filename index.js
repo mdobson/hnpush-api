@@ -12,7 +12,7 @@ argo()
             if(err) {
               console.log("Error:"+err);
             } else {
-              console.log(body);
+              console.log(body.toString());
             }
             env.response.statusCode = 204;
             next(env);
