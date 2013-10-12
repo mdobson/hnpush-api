@@ -1,5 +1,6 @@
 var argo = require("argo"),
-    router = require("argo-url-router");
+    router = require("argo-url-router"),
+    url = require('url');
 
 argo()
   .use(router)
@@ -18,7 +19,16 @@ argo()
             next(env);
           });
         });
-      });
+      })
+      .get('/new', function(handle) {
+        handle('request', function(env, next) {
+          var parsed = url.parse(env.request.url, true);
+          console.log(parsed);
+          env.response.body = parsed.query['hub.challenge'];
+          env.response.statusCode = 200;
+          next(env);
+        });
+      })
     })
     .listen(process.env.PORT || 3000);
 
