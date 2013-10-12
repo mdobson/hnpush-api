@@ -3,7 +3,7 @@ var argo = require("argo"),
 
 argo()
   .use(router)
-  .map('/subscribe' function(server) {
+  .map('/subscribe', function(server) {
     server
       .post('/new', function(handle) {
         handle('request', function(env, next) {
