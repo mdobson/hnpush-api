@@ -1,7 +1,65 @@
 var argo = require("argo"),
     router = require("argo-url-router"),
     url = require('url'),
-    parser = require('./parser');
+    parser = require('./parser'),
+    ug = require("usergrid");
+
+var client = new ug.client({
+  orgName:"mdobson",
+  appName:"pushtome-dev"
+});
+
+/*
+*  Function to send push notification to a specified path. Call directly.
+*
+*  @method sendPushToDevice
+*  @public
+*  @param {object} options
+*  @param {function} callback
+*  @return {callback} callback(err, data)
+*/
+
+ug.client.prototype.sendPushToDevice = function(options, callback) {
+  if (options) {
+    var notifierName = options.notifier;
+    var notifierLookupOptions = {
+      "type":"notifier",
+      "name":options.notifier
+    }
+    var self = this;
+    this.getEntity(notifierLookupOptions, function(error, result){
+      if (error) {
+        callback(error, result);
+      } else {
+        var pushEntity = {
+          "type":options.path
+        }
+        if (result.get("provider") === "google") {
+              pushEntity["payloads"] = {};
+              pushEntity["payloads"][notifierName] = options.message;
+        } else if (result.get("provider") === "apple") {
+                   pushEntity["payloads"] = {}
+                   pushEntity["payloads"][notifierName] = {
+              "aps": {
+                  "alert":options.message,
+                  "sound":options.sound
+              }
+           }
+        }
+       var entityOptions = {
+         client:self,
+         data:pushEntity
+       };
+        var notification = new Usergrid.Entity(entityOptions);
+        notification.save(callback);
+      }
+    });
+  } else {
+    callback(true);
+  }
+}
+
+
 
 argo()
   .use(router)
@@ -15,9 +73,38 @@ argo()
             } else {
               var body = body.toString();
               console.log(body);
-              parser(body, function(err, title, link) {
-                env.response.statusCode = 204;
-                next(env);
+              parser(body, function(err, id, title, link) {
+                var entity = {
+                  type: "stories",
+                  name: id,
+                  title: title,
+                  link: link
+                };
+
+                client.createEntity(entity, function(err, res){
+                  if (err) {
+                    env.response.statusCode = 500;
+                    env.response.body = { "error": res };
+                    next(env);
+                  } else {
+                    env.response.statusCode = 204;
+                    next(env);
+                    // var options = {
+                    //   notifier:"YOUR NOTIFIER",
+                    //   path:devicePath,
+                    //   message:title
+                    // };
+                    // client.sendPushToDevice(options, function(error, data){
+                    //   if(error) {
+                    //     env.response.statusCode = 500;
+                    //     env.response.body = { "error": data };
+                    //   } else {
+                    //     env.response.statusCode = 204;
+                    //     next(env);
+                    //   }
+                    // });
+                  }
+                });
               });
             }
           });
@@ -34,4 +121,4 @@ argo()
       })
     })
     .listen(process.env.PORT || 3000);
-    
+

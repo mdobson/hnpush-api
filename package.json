@@ -9,7 +9,8 @@
   "dependencies":{
     "argo":"0.4.x",
     "argo-url-router":"0.0.x",
-    "xml2js":"0.2.x"
+    "xml2js":"0.2.x",
+    "usergrid":"0.10.x"
   },
   "engines": {
     "node": ">= v0.8.x",
