@@ -87,12 +87,13 @@ argo()
                     env.response.body = { "error": res };
                     next(env);
                   } else {
-                    env.response.statusCode = 204;
+                    env.response.statusCode = 200;
                     next(env);
                     // var options = {
                     //   notifier:"YOUR NOTIFIER",
                     //   path:devicePath,
-                    //   message:title
+                    //   message:title,
+                    //   sound:"chime"
                     // };
                     // client.sendPushToDevice(options, function(error, data){
                     //   if(error) {
