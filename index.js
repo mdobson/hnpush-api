@@ -1,6 +1,7 @@
 var argo = require("argo"),
     router = require("argo-url-router"),
-    url = require('url');
+    url = require('url'),
+    parser = require('./parser');
 
 argo()
   .use(router)
@@ -12,10 +13,13 @@ argo()
             if(err) {
               console.log("Error:"+err);
             } else {
-              console.log(body.toString());
+              var body = body.toString();
+              console.log(body);
+              parser(body, function(err, title, link) {
+                env.response.statusCode = 204;
+                next(env);
+              });
             }
-            env.response.statusCode = 204;
-            next(env);
           });
         });
       })
@@ -30,4 +34,4 @@ argo()
       })
     })
     .listen(process.env.PORT || 3000);
-
+    
