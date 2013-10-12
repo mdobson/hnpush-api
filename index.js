@@ -32,7 +32,8 @@ ug.client.prototype.sendPushToDevice = function(options, callback) {
         callback(error, result);
       } else {
         var pushEntity = {
-          "type":options.path
+          "type":options.path,
+          "name":options.name
         }
         if (result.get("provider") === "google") {
               pushEntity["payloads"] = {};
@@ -50,7 +51,7 @@ ug.client.prototype.sendPushToDevice = function(options, callback) {
          client:self,
          data:pushEntity
        };
-        var notification = new Usergrid.Entity(entityOptions);
+        var notification = new ug.Entity(entityOptions);
         notification.save(callback);
       }
     });
@@ -93,7 +94,8 @@ argo()
                       notifier:"hnpush",
                       path:"devices/8ab5c400-2c44-4745-9544-e9a2a773ec8d/notifications",
                       message:title,
-                      sound:"chime"
+                      sound:"chime",
+                      name:id
                     };
                     client.sendPushToDevice(options, function(error, data){
                       if(error) {
