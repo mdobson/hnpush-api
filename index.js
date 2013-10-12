@@ -87,23 +87,23 @@ argo()
                     env.response.body = { "error": res };
                     next(env);
                   } else {
-                    env.response.statusCode = 200;
-                    next(env);
-                    // var options = {
-                    //   notifier:"YOUR NOTIFIER",
-                    //   path:devicePath,
-                    //   message:title,
-                    //   sound:"chime"
-                    // };
-                    // client.sendPushToDevice(options, function(error, data){
-                    //   if(error) {
-                    //     env.response.statusCode = 500;
-                    //     env.response.body = { "error": data };
-                    //   } else {
-                    //     env.response.statusCode = 204;
-                    //     next(env);
-                    //   }
-                    // });
+                    // env.response.statusCode = 200;
+                    // next(env);
+                    var options = {
+                      notifier:"hnpush",
+                      path:"devices/8ab5c400-2c44-4745-9544-e9a2a773ec8d/notifications",
+                      message:title,
+                      sound:"chime"
+                    };
+                    client.sendPushToDevice(options, function(error, data){
+                      if(error) {
+                        env.response.statusCode = 500;
+                        env.response.body = { "error": data };
+                      } else {
+                        env.response.statusCode = 204;
+                        next(env);
+                      }
+                    });
                   }
                 });
               });
