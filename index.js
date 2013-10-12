@@ -51,7 +51,7 @@ ug.client.prototype.sendPushToDevice = function(options, callback) {
          client:self,
          data:pushEntity
        };
-        var notification = new ug.Entity(entityOptions);
+        var notification = new ug.entity(entityOptions);
         notification.save(callback);
       }
     });
