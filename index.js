@@ -12,8 +12,7 @@ argo()
             if(err) {
               console.log("Error:"+err);
             } else {
-              var obj = JSON.parse(body);
-              console.log(JSON.stringify(obj, undefined, 2));
+              console.log(body);
             }
             env.response.statusCode = 204;
             next(env);
